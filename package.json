@@ -1,0 +1,21 @@
+{
+  "name": "sell-your-stuff",
+  "version": "0.1.0",
+  "private": true,
+  "description": "A simple sale site you can run yourself. List your stuff, take offers and track who's paid.",
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler dev --port 8791",
+    "deploy": "wrangler deploy"
+  },
+  "devDependencies": {
+    "wrangler": "^4.45.0"
+  },
+  "cloudflare": {
+    "bindings": {
+      "ADMIN_PASSWORD": {
+        "description": "The password you'll use to sign in at /admin. Make it long and don't reuse one."
+      }
+    }
+  }
+}
