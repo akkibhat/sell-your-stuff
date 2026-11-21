@@ -3,11 +3,13 @@ import { el, money, api, applyAccent, field } from './shared.js';
 
 const state = { settings: null, items: [], view: 'open', category: 'All' };
 const $ = (id) => document.getElementById(id);
+// On a hosted site the sale lives at /<slug>. On a template site it's just /.
+const slug = window.location.pathname.split('/')[1] || '';
 
 // Loads the sale and draws the page.
 async function start() {
   try {
-    const sale = await api('/api/sale');
+    const sale = await api(slug ? `/api/sale/${encodeURIComponent(slug)}` : '/api/sale');
     state.settings = sale.settings;
     state.items = sale.items;
   } catch (error) {
@@ -45,7 +47,7 @@ function render() {
 
   $('filters').replaceChildren(
     pill(`For sale (${state.items.length - soldCount})`, state.view === 'open', setView('open')),
-    soldCount > 0 && pill(`Sold (${soldCount})`, state.view === 'sold', setView('sold')),
+    ...(soldCount > 0 ? [pill(`Sold (${soldCount})`, state.view === 'sold', setView('sold'))] : []),
     ...(categories.length > 1
       ? ['All', ...categories].map((name) => pill(name, state.category === name, setCategory(name)))
       : []),
@@ -138,7 +140,7 @@ function offerSection(item) {
       try {
         await api('/api/offers', {
           json: {
-            itemId: item.id, name: name.value, email: email.value,
+            slug, itemId: item.id, name: name.value, email: email.value,
             amount: amount.value, message: message.value, website: website.value,
           },
         });

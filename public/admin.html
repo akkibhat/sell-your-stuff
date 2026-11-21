@@ -5,23 +5,28 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex">
 <title>Sale admin</title>
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="/assets/styles.css">
 </head>
 <body>
 <section id="loginView" class="login" hidden>
   <h1>Sign in</h1>
   <form id="loginForm">
-    <label class="field"><span>Admin password</span>
+    <label id="emailField" class="field" hidden><span>Email</span>
+      <input id="email" type="email" autocomplete="username">
+    </label>
+    <label class="field"><span id="passwordLabel">Admin password</span>
       <input id="password" type="password" autocomplete="current-password" required>
     </label>
     <button class="btn primary" type="submit">Sign in</button>
     <p id="loginError" class="error" role="alert"></p>
   </form>
+  <p id="signupNote" class="muted" hidden>Got an invite? <a href="/signup">Sign up here</a>.</p>
 </section>
 <div id="appView" hidden>
   <header class="admin-header">
     <h1>Your sale</h1>
-    <a href="/" target="_blank" rel="noopener">View sale page</a>
+    <a id="saleLink" href="/" target="_blank" rel="noopener">View sale page</a>
     <button id="signOut" class="btn" type="button">Sign out</button>
   </header>
   <nav id="tabs" class="filters" aria-label="Admin sections"></nav>

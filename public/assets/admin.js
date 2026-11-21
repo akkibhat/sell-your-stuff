@@ -1,13 +1,20 @@
 // The admin page: add, edit and remove items, manage offers and change settings.
-import { el, money, api, applyAccent, field } from './shared.js';
+import { el, money, api, applyAccent, field, confirmButton } from './shared.js';
 
-const state = { settings: null, items: [], offers: [], statuses: [], tab: 'items' };
+const state = { settings: null, items: [], offers: [], statuses: [], tab: 'items', hosted: false };
 const freshPhotos = new Map(); // Photos uploaded this visit, shown from memory.
 const MAX_PHOTO_SIDE = 1400;
 const $ = (id) => document.getElementById(id);
 
 // Tries to load the admin data, and shows the sign-in form if that's refused.
 async function start() {
+  // Hosted sites sign sellers in with email and password; template sites use one password.
+  const config = await api('/api/config').catch(() => ({ mode: 'template' }));
+  state.hosted = config.mode === 'hosted';
+  $('emailField').hidden = !state.hosted;
+  $('email').required = state.hosted;
+  $('signupNote').hidden = !state.hosted;
+  if (state.hosted) $('passwordLabel').textContent = 'Password';
   $('loginForm').addEventListener('submit', handleLogin);
   $('signOut').addEventListener('click', () => run(async () => {
     await api('/api/admin/logout', { method: 'POST' });
@@ -32,7 +39,7 @@ function showLogin(message = '') {
 async function handleLogin(event) {
   event.preventDefault();
   try {
-    await api('/api/admin/login', { json: { password: $('password').value } });
+    await api('/api/admin/login', { json: { email: $('email').value, password: $('password').value } });
     await load();
   } catch (error) {
     showLogin(error.message);
@@ -42,6 +49,7 @@ async function handleLogin(event) {
 // Fetches everything from the server and draws the page.
 async function load() {
   Object.assign(state, await api('/api/admin/data'));
+  $('saleLink').href = state.saleUrl || '/';
   $('loginView').hidden = true;
   $('appView').hidden = false;
   render();
@@ -80,20 +88,6 @@ function render() {
   })));
   const panels = { items: itemsPanel, offers: offersPanel, settings: settingsPanel };
   $('panel').replaceChildren(...panels[state.tab]().filter(Boolean));
-}
-
-// Builds a button that asks for a second click before doing something permanent.
-function confirmButton(label, action) {
-  let armed = false;
-  const button = el('button', { className: 'btn small danger', type: 'button', text: label });
-  button.addEventListener('click', () => {
-    if (armed) return action();
-    armed = true;
-    button.textContent = 'Click again to confirm';
-    setTimeout(() => { armed = false; button.textContent = label; }, 4000);
-    return undefined;
-  });
-  return button;
 }
 
 // Returns the image address for a photo, preferring one uploaded this visit.

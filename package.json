@@ -5,8 +5,10 @@
   "description": "A simple sale site you can run yourself. List your stuff, take offers and track who's paid.",
   "type": "module",
   "scripts": {
-    "dev": "wrangler dev --port 8791",
-    "deploy": "wrangler deploy"
+    "dev": "wrangler d1 migrations apply DB --local && wrangler dev --port 8791",
+    "dev:hosted": "wrangler d1 migrations apply DB --local --env hosted && wrangler dev --env hosted --port 8792",
+    "deploy": "wrangler d1 migrations apply DB --remote && wrangler deploy",
+    "deploy:hosted": "wrangler d1 migrations apply DB --remote --env hosted && wrangler deploy --env hosted"
   },
   "devDependencies": {
     "wrangler": "^4.45.0"

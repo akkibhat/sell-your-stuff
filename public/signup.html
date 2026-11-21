@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Sign up</title>
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/assets/styles.css">
+</head>
+<body>
+<main class="login">
+  <h1>Set up your sale</h1>
+  <form id="signupForm">
+    <label class="field"><span>Invite code</span>
+      <input id="code" required maxlength="40" autocomplete="off" placeholder="ABCD-EFGH-JKMN">
+    </label>
+    <label class="field"><span>Your email</span>
+      <input id="email" type="email" required maxlength="200" autocomplete="email">
+    </label>
+    <label class="field"><span>Password (at least 10 characters)</span>
+      <input id="password" type="password" required minlength="10" maxlength="200" autocomplete="new-password">
+    </label>
+    <label class="field"><span>Sale name</span>
+      <input id="saleName" required maxlength="80" placeholder="Sam's moving sale">
+    </label>
+    <label class="field"><span id="slugLabel">Your link</span>
+      <input id="slug" required minlength="3" maxlength="40" pattern="[a-z0-9][a-z0-9\-]{1,38}[a-z0-9]" autocomplete="off" placeholder="sams-moving-sale">
+    </label>
+    <p id="slugPreview" class="muted"></p>
+    <button class="btn primary" type="submit">Create my sale</button>
+    <p id="signupError" class="error" role="alert"></p>
+  </form>
+  <p class="muted">Already set up? <a href="/admin">Sign in</a>.</p>
+</main>
+<script type="module" src="/assets/signup.js"></script>
+</body>
+</html>

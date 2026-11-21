@@ -9,6 +9,48 @@ directory = "./public"
 binding = "ASSETS"
 run_worker_first = true
 
-# Cloudflare creates this storage for you on the first deploy.
+# ---------------------------------------------------------------------------
+# Template mode (the default). One sale, one admin, no card needed.
+# Cloudflare creates the database and the photo store for you on the first
+# deploy, and `npm run deploy` sets up the tables.
+# ---------------------------------------------------------------------------
+
+[vars]
+MODE = "template"
+
+# Items, offers and settings.
+[[d1_databases]]
+binding = "DB"
+database_name = "sell-your-stuff"
+migrations_dir = "migrations"
+
+# Photos.
 [[kv_namespaces]]
 binding = "SALE_KV"
+
+# ---------------------------------------------------------------------------
+# Hosted mode: many invited sellers on one site. Deploy with
+#   npm run deploy:hosted
+# Fill in the database id and the route first (see the README).
+# ---------------------------------------------------------------------------
+
+[env.hosted]
+name = "sell-your-stuff-hosted"
+workers_dev = false
+# Hosted photos use R2, not KV.
+kv_namespaces = []
+# routes = [{ pattern = "sell.pi.co.nz", custom_domain = true }]
+
+[env.hosted.vars]
+MODE = "hosted"
+
+[[env.hosted.d1_databases]]
+binding = "DB"
+database_name = "sell-your-stuff-hosted"
+# database_id = "paste the id from `wrangler d1 create sell-your-stuff-hosted` here"
+migrations_dir = "migrations"
+
+# Photos live in R2 in hosted mode. R2 needs a card on the account.
+[[env.hosted.r2_buckets]]
+binding = "PHOTOS"
+bucket_name = "sell-your-stuff-photos"

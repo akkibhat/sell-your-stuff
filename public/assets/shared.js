@@ -56,3 +56,17 @@ export function applyAccent(color) {
 export function field(label, control) {
   return el('label', { className: 'field' }, el('span', { text: label }), control);
 }
+
+// Builds a button that asks for a second click before doing something permanent.
+export function confirmButton(label, action) {
+  let armed = false;
+  const button = el('button', { className: 'btn small danger', type: 'button', text: label });
+  button.addEventListener('click', () => {
+    if (armed) return action();
+    armed = true;
+    button.textContent = 'Click again to confirm';
+    setTimeout(() => { armed = false; button.textContent = label; }, 4000);
+    return undefined;
+  });
+  return button;
+}

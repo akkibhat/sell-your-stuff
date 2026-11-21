@@ -1,1 +1,6 @@
+# Template mode: the password for /admin.
 ADMIN_PASSWORD=choose-a-long-password
+
+# Hosted mode goes in .dev.vars.hosted instead:
+# OWNER_PASSWORD=choose-a-long-password
+# SESSION_SECRET=a-long-random-string

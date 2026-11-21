@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Owner</title>
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/assets/styles.css">
+</head>
+<body>
+<section id="loginView" class="login" hidden>
+  <h1>Owner sign in</h1>
+  <form id="loginForm">
+    <label class="field"><span>Owner password</span>
+      <input id="password" type="password" autocomplete="current-password" required>
+    </label>
+    <button class="btn primary" type="submit">Sign in</button>
+    <p id="loginError" class="error" role="alert"></p>
+  </form>
+</section>
+<div id="appView" hidden>
+  <header class="admin-header">
+    <h1>Invites and sellers</h1>
+    <button id="signOut" class="btn" type="button">Sign out</button>
+  </header>
+  <p id="flash" class="flash" role="status" hidden></p>
+  <main id="panel" class="panel"></main>
+</div>
+<script type="module" src="/assets/owner.js"></script>
+</body>
+</html>
