@@ -5,12 +5,15 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex">
 <title>Sale admin</title>
+<link rel="icon" href="/favicon.ico" sizes="32x32">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/icon-192.png" type="image/png" sizes="192x192">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="stylesheet" href="/assets/styles.css">
 </head>
 <body>
 <section id="loginView" class="login" hidden>
-  <h1>Sign in</h1>
+  <h1 class="brand"><img class="logo" src="/favicon.svg" alt="" width="40" height="40">Sign in</h1>
   <form id="loginForm">
     <label id="emailField" class="field" hidden><span>Email</span>
       <input id="email" type="email" autocomplete="username">
@@ -25,7 +28,7 @@
 </section>
 <div id="appView" hidden>
   <header class="admin-header">
-    <h1>Your sale</h1>
+    <h1 class="brand"><img class="logo" src="/favicon.svg" alt="" width="40" height="40">Your sale</h1>
     <a id="saleLink" href="/" target="_blank" rel="noopener">View sale page</a>
     <button id="signOut" class="btn" type="button">Sign out</button>
   </header>

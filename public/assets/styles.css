@@ -19,6 +19,9 @@ body {
   line-height: 1.5;
 }
 h1 { font-size: 1.8rem; margin: 0 0 8px; }
+/* The app's box logo, sitting quietly before the page heading. */
+.brand { display: flex; align-items: flex-start; gap: 10px; }
+.brand .logo { width: 1.4em; height: 1.4em; flex: none; margin-top: -0.05em; }
 h2 { font-size: 1.2rem; margin: 0 0 8px; }
 h3 { font-size: 1rem; margin: 0; }
 a { color: var(--accent); }
@@ -106,7 +109,7 @@ input[type="color"] { padding: 2px; height: 40px; width: 70px; }
 
 .login { max-width: 360px; margin: 80px auto; padding: 0 16px; }
 .admin-header { display: flex; flex-wrap: wrap; gap: 16px; align-items: center; padding-top: 24px; padding-bottom: 16px; }
-.admin-header h1 { margin: 0; flex: 1; }
+.admin-header h1 { margin: 0; flex: 1 0 auto; }
 .panel { padding-bottom: 60px; display: grid; gap: 12px; }
 .row {
   background: var(--card); border: 1px solid var(--line); border-radius: 10px;

@@ -5,12 +5,15 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex">
 <title>Owner</title>
+<link rel="icon" href="/favicon.ico" sizes="32x32">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/icon-192.png" type="image/png" sizes="192x192">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="stylesheet" href="/assets/styles.css">
 </head>
 <body>
 <section id="loginView" class="login" hidden>
-  <h1>Owner sign in</h1>
+  <h1 class="brand"><img class="logo" src="/favicon.svg" alt="" width="40" height="40">Owner sign in</h1>
   <form id="loginForm">
     <label class="field"><span>Owner password</span>
       <input id="password" type="password" autocomplete="current-password" required>
@@ -21,7 +24,7 @@
 </section>
 <div id="appView" hidden>
   <header class="admin-header">
-    <h1>Invites and sellers</h1>
+    <h1 class="brand"><img class="logo" src="/favicon.svg" alt="" width="40" height="40">Invites and sellers</h1>
     <button id="signOut" class="btn" type="button">Sign out</button>
   </header>
   <p id="flash" class="flash" role="status" hidden></p>
