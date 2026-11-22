@@ -185,7 +185,7 @@ function withSecurityHeaders(response) {
   const secured = new Response(response.body, response);
   secured.headers.set(
     'Content-Security-Policy',
-    "default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' blob:; connect-src 'self'; form-action 'self'; base-uri 'none'; frame-ancestors 'none'",
+    "default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' blob:; manifest-src 'self'; connect-src 'self'; form-action 'self'; base-uri 'none'; frame-ancestors 'none'",
   );
   secured.headers.set('X-Content-Type-Options', 'nosniff');
   secured.headers.set('Referrer-Policy', 'same-origin');
