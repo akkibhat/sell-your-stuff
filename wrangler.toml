@@ -39,7 +39,7 @@ name = "sell-your-stuff-hosted"
 workers_dev = false
 # Hosted photos use R2, not KV.
 kv_namespaces = []
-# routes = [{ pattern = "sell.pi.co.nz", custom_domain = true }]
+routes = [{ pattern = "sell.pi.co.nz", custom_domain = true }]
 
 [env.hosted.vars]
 MODE = "hosted"
@@ -47,7 +47,7 @@ MODE = "hosted"
 [[env.hosted.d1_databases]]
 binding = "DB"
 database_name = "sell-your-stuff-hosted"
-# database_id = "paste the id from `wrangler d1 create sell-your-stuff-hosted` here"
+database_id = "b0ad05dc-d5b8-4a6a-ae73-2a007c19ff37"
 migrations_dir = "migrations"
 
 # Photos live in R2 in hosted mode. R2 needs a card on the account.
