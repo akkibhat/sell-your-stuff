@@ -15,8 +15,18 @@ function showPreview() {
   $('slugPreview').textContent = slug ? `Your sale will be at ${window.location.host}/${slug}` : '';
 }
 
+// Fills in the invite code from a shared link (/signup#code=...), then clears it from the address bar.
+function prefillCode() {
+  const code = new URLSearchParams(window.location.hash.slice(1)).get('code');
+  if (!code) return;
+  $('code').value = code.slice(0, 40);
+  window.history.replaceState(null, '', window.location.pathname);
+  $('email').focus();
+}
+
 // Wires up the form: link suggestions while typing, and sending the sign-up.
 function start() {
+  prefillCode();
   $('saleName').addEventListener('input', () => {
     if (!slugEdited) $('slug').value = suggestSlug($('saleName').value);
     showPreview();

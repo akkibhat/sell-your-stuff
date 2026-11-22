@@ -76,6 +76,9 @@ p { margin: 0; }
   padding: 10px 14px;
 }
 .flash { max-width: var(--wide); margin: 0 auto 12px; }
+.invite-new { display: grid; gap: 10px; }
+.invite-new b { font-variant-numeric: tabular-nums; letter-spacing: 0.04em; color: var(--ink); }
+.invite-link b { overflow-wrap: anywhere; user-select: all; }
 .flash.bad { background: var(--bad-tint); color: var(--bad); border-color: #e7c1ba; }
 .plate {
   font-size: 0.78em; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em;

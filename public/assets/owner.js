@@ -92,14 +92,58 @@ function render() {
   $('panel').replaceChildren(...[
     el('h2', { text: 'Invites' }),
     inviteForm,
-    state.newCode && el('p', { className: 'notice' },
-      'Here\'s the code. Copy it now, it won\'t be shown again: ', el('b', { text: state.newCode })),
+    state.newCode && newCodeNotice(state.newCode),
     !state.invites.length && el('p', { className: 'muted', text: 'No invites yet.' }),
     ...state.invites.map(inviteRow),
     el('h2', { text: `Sales (${state.sales.length})` }),
     !state.sales.length && el('p', { className: 'muted', text: 'Nobody has signed up yet.' }),
     ...state.sales.map(saleRow),
   ].filter(Boolean));
+}
+
+// Makes the sign-up link for an invite. The code sits after the # so it never reaches the server's logs.
+function inviteLink(code) {
+  return `${window.location.origin}/signup#code=${encodeURIComponent(code)}`;
+}
+
+// Shares an invite link through the phone's share sheet, or copies it where sharing isn't available.
+// If copying is blocked too, the link stays on screen so it can be copied by hand.
+async function shareInvite(code, linkLine) {
+  const url = inviteLink(code);
+  if (navigator.share) {
+    try {
+      await navigator.share({ title: 'Your Sell Your Stuff invite', text: "Here's your invite to set up a sale:", url });
+      return;
+    } catch (error) {
+      if (error.name === 'AbortError') return;
+    }
+  }
+  try {
+    await navigator.clipboard.writeText(url);
+    flash('Invite link copied. Paste it into a message.');
+  } catch {
+    linkLine.replaceChildren('Copy this link: ', el('b', { text: url }));
+    linkLine.hidden = false;
+  }
+}
+
+// Copies just the invite code, for people who'd rather type it in.
+function copyCode(code) {
+  navigator.clipboard.writeText(code).then(
+    () => flash('Code copied.'),
+    () => flash("Copying didn't work. Select the code and copy it.", true),
+  );
+}
+
+// Shows a new invite code once, with buttons to share the link or copy the code.
+function newCodeNotice(code) {
+  const linkLine = el('p', { className: 'invite-link', hidden: true });
+  return el('div', { className: 'notice invite-new' },
+    el('p', {}, "Here's the code. Share or copy it now, it won't be shown again: ", el('b', { text: code })),
+    el('div', { className: 'actions' },
+      el('button', { className: 'btn primary small', type: 'button', text: 'Share invite', onclick: () => shareInvite(code, linkLine) }),
+      el('button', { className: 'btn small', type: 'button', text: 'Copy code', onclick: () => copyCode(code) })),
+    linkLine);
 }
 
 // Builds one invite row: who it's for and whether it's been used.

@@ -70,8 +70,11 @@ Hosted mode is for running one site for a few friends. Here's how it works:
   It never lists anyone's sales.
 - You sign in at `/owner` with `OWNER_PASSWORD`. From there you make invite
   codes, see every seller and their sale link, and pause or delete a sale.
-- Each invite code works once. You see the full code when you make it, so copy
-  it then. After that only the first four letters show.
+- Each invite code works once. You see the full code when you make it, so share
+  or copy it then. After that only the first four letters show.
+- **Share invite** opens your phone's share sheet (Instagram, Messages and so
+  on) with a sign-up link that fills in the code. On a computer it copies the
+  link instead.
 - A friend signs up at `/signup` with the code, their email, a password and the
   name and link for their sale, like `/sams-moving-sale`. Links use lowercase
   letters, numbers and hyphens, 3 to 40 characters.
