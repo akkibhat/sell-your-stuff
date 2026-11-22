@@ -22,7 +22,7 @@ async function start() {
   document.title = settings.saleName;
   $('saleName').textContent = settings.saleName;
   $('intro').textContent = settings.intro;
-  $('location').textContent = settings.location ? `Pickup: ${settings.location}` : '';
+  $('location').replaceChildren(...(settings.location ? [el('span', { className: 'plate', text: 'Pickup' }), settings.location] : []));
   $('closedNote').hidden = !settings.closed;
   render();
 }
@@ -40,8 +40,8 @@ function render() {
   const shown = viewItems.filter((item) => state.category === 'All' || item.category === state.category);
   const soldCount = state.items.filter((item) => item.status === 'Sold').length;
 
-  const pill = (label, active, onclick) =>
-    el('button', { className: `pill${active ? ' active' : ''}`, type: 'button', text: label, onclick });
+  const pill = (label, active, onclick, kind = '') =>
+    el('button', { className: `pill${kind}${active ? ' active' : ''}`, type: 'button', text: label, 'aria-pressed': String(active), onclick });
   const setView = (view) => () => { state.view = view; render(); };
   const setCategory = (category) => () => { state.category = category; render(); };
 
@@ -49,7 +49,7 @@ function render() {
     pill(`For sale (${state.items.length - soldCount})`, state.view === 'open', setView('open')),
     ...(soldCount > 0 ? [pill(`Sold (${soldCount})`, state.view === 'sold', setView('sold'))] : []),
     ...(categories.length > 1
-      ? ['All', ...categories].map((name) => pill(name, state.category === name, setCategory(name)))
+      ? ['All', ...categories].map((name) => pill(name, state.category === name, setCategory(name), ' cat'))
       : []),
   );
   $('grid').replaceChildren(...shown.map(card));
@@ -64,28 +64,49 @@ function priceLine(item) {
     item.wasPrice > item.price && el('span', { className: 'was', text: money(item.wasPrice, currency) }));
 }
 
-// Builds the photo area for an item, with a status badge when it isn't available.
+// Builds the photo area for an item.
 function photoBox(item, photoId, extraClass = '') {
   return el('div', { className: `photo-box ${extraClass}` },
     photoId
       ? el('img', { src: `/photos/${photoId}`, alt: item.title, loading: 'lazy' })
-      : el('span', { text: 'No photo' }),
-    item.status === 'Pending' && el('span', { className: 'badge', text: 'Pending' }),
-    item.status === 'Sold' && el('span', { className: 'badge sold', text: 'Sold' }));
+      : el('span', { text: 'No photo' }));
 }
 
-// Builds one item card that opens the detail dialog when clicked.
+// Picks the paper colour for an item: sold, someone lined up, free, or for sale.
+function paper(item) {
+  if (item.status === 'Sold') return 'sold';
+  if (item.status === 'Pending') return 'pending';
+  return item.price === 0 ? 'free' : 'open';
+}
+
+// Builds the small label that says someone is already lined up for an item.
+function stamp(item) {
+  if (item.status === 'Pending') return el('span', { className: 'stamp', text: 'On hold' });
+  return null;
+}
+
+// Builds the tear-off strip at the foot of a flyer, saying what a tap will do.
+function tabs(item) {
+  let label = 'Make an offer';
+  if (item.status === 'Sold') label = 'Sold';
+  else if (item.status === 'Pending') label = 'Make a backup offer';
+  return el('span', { className: 'tabs', text: label });
+}
+
+// Builds one item flyer that opens the detail dialog when clicked.
 function card(item) {
   return el('button', {
-    className: `card${item.status === 'Sold' ? ' sold' : ''}`,
+    className: `card ${paper(item)}`,
     type: 'button',
     onclick: () => openItem(item),
   },
     photoBox(item, item.photos[0]),
-    el('div', { className: 'card-body' },
+    el('span', { className: 'card-body' },
+      stamp(item),
       el('h3', { text: item.title }),
       priceLine(item),
-      item.condition && el('span', { className: 'muted', text: item.condition })));
+      item.condition && el('span', { className: 'muted', text: item.condition })),
+    tabs(item));
 }
 
 // Opens the detail dialog with photos, description and the offer form.
@@ -106,9 +127,10 @@ function openItem(item) {
   }
   showPhoto(0);
 
+  dialog.className = `dialog ${paper(item)}`;
   dialog.replaceChildren(el('div', { className: 'dialog-body' },
     el('div', { className: 'dialog-head' },
-      el('h2', { text: item.title }),
+      el('div', { className: 'group' }, stamp(item), el('h2', { text: item.title })),
       el('button', { className: 'btn small', type: 'button', text: 'Close', onclick: () => dialog.close() })),
     photoHolder,
     thumbs,
@@ -133,6 +155,7 @@ function offerSection(item) {
   const submit = el('button', { className: 'btn primary', type: 'submit', text: 'Send offer' });
 
   const form = el('form', {
+    className: 'offer',
     onsubmit: async (event) => {
       event.preventDefault();
       submit.disabled = true;
